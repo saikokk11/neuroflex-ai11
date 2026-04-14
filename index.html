@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroFlex AI - Inteligência Adaptável</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+/* Tela de Login */
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 20px;
+}
+
+.login-box {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    width: 350px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: #a78bfa;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+}
+
+.login-box input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.login-box button:hover {
+    transform: scale(1.02);
+}
+
+/* App Principal */
+.app {
+    display: none;
+}
+
+.header {
+    background: rgba(2, 6, 23, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.premium-badge {
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.free-badge {
+    background: #334155;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.nova-chat-btn {
+    background: #6366f1;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.nova-chat-btn:hover {
+    background: #4f46e5;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    height: calc(100vh - 70px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar h3 {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.conversa-item {
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.conversa-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.conversa-item.ativa {
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+}
+
+/* Chat principal */
+.chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message.user {
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+.message.bot {
+    background: rgba(255,255,255,0.1);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+/* Input area */
+.input-area {
+    padding: 20px;
+    background: rgba(2, 6, 23, 0.8);
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.input-area input {
+    flex: 1;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 14px;
+}
+
+.input-area input:focus {
+    outline: none;
+    background: rgba(255,255,255,0.15);
+}
+
+.input-area button {
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Painel de modos (aparece para premium) */
+.modos-painel {
+    background: rgba(2, 6, 23, 0.9);
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: none;
+}
+
+.modos-painel.visible {
+    display: block;
+}
+
+.modos-titulo {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.modos-botoes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.modo-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.modo-btn:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.modo-btn.ativo {
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    border-color: transparent;
+}
+
+/* Aviso free */
+.free-aviso {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    padding: 10px;
+    margin: 10px 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 13px;
+    display: none;
+}
+
+.free-aviso.visible {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TELA DE LOGIN -->
+<div id="telaLogin" class="login">
+    <div class="login-box">
+        <h2>🧠 NeuroFlex AI</h2>
+        <input type="email" id="loginEmail" placeholder="Seu email">
+        <input type="password" id="loginSenha" placeholder="Senha">
+        <button onclick="fazerLogin()">Entrar</button>
+        <p style="font-size: 12px; margin-top: 15px; color: #94a3b8;">🔑 Admin: seuemail@gmail.com | Qualquer senha</p>
+    </div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app" class="app">
+
+    <div class="header">
+        <h1>🧠 NeuroFlex AI</h1>
+        <div class="user-info">
+            <span id="userRoleBadge"></span>
+            <button class="nova-chat-btn" onclick="novaConversa()">+ Nova Conversa</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h3>📋 CONVERSAS</h3>
+            <div id="listaConversas"></div>
+        </div>
+
+        <div class="chat">
+            <div class="messages" id="chatMessages">
+                <div class="message bot">Olá! Eu sou o NeuroFlex AI. Faça uma pergunta para começar! 🧠</div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="mensagemInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter') enviarMensagem()">
+                <button onclick="enviarMensagem()">Enviar ➤</button>
+            </div>
+
+            <div id="modosPainel" class="modos-painel">
+                <div class="modos-titulo">🎛️ Modos de IA (Premium)</div>
+                <div class="modos-botoes">
+                    <button class="modo-btn" data-modo="rapido" onclick="setModo('rapido')">⚡ Rápido</button>
+                    <button class="modo-btn" data-modo="inteligente" onclick="setModo('inteligente')">🧠 Inteligente</button>
+                    <button class="modo-btn" data-modo="criativo" onclick="setModo('criativo')">🎨 Criativo</button>
+                    <button class="modo-btn" data-modo="executor" onclick="setModo('executor')">⚙️ Executor</button>
+                </div>
+            </div>
+
+            <div id="freeAviso" class="free-aviso">
+                ⚠️ Você está no plano FREE. <strong>Assine o Premium</strong> para ter IA completa, modos especiais e respostas avançadas!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// SISTEMA NEUROFLEX AI - VERSÃO COMPLETA
+// ============================================
+
+let usuarioAtual = null;
+let conversas = [];
+let conversaAtualId = null;
+let modoAtual = "inteligente";
+
+// Carregar conversas salvas
+function carregarConversas() {
+    const salvo = localStorage.getItem("neuroflex_conversas");
+    if(salvo) {
+        conversas = JSON.parse(salvo);
+    }
+    if(conversas.length === 0) {
+        criarNovaConversa();
+    }
+    atualizarListaConversas();
+}
+
+function criarNovaConversa() {
+    const novaId = Date.now();
+    const novaConversa = {
+        id: novaId,
+        titulo: `Chat ${conversas.length + 1}`,
+        mensagens: [
+            { tipo: "bot", texto: "Olá! Eu sou o NeuroFlex AI. Faça uma pergunta para começar! 🧠" }
+        ],
+        data: new Date().toISOString()
+    };
+    conversas.unshift(novaConversa);
+    conversaAtualId = novaId;
+    salvarConversas();
+    atualizarListaConversas();
+    carregarMensagens(novaId);
+}
+
+function salvarConversas() {
+    localStorage.setItem("neuroflex_conversas", JSON.stringify(conversas));
+}
+
+function atualizarListaConversas() {
+    const container = document.getElementById("listaConversas");
+    container.innerHTML = "";
+    
+    conversas.forEach(conv => {
+        const div = document.createElement("div");
+        div.className = `conversa-item ${conversaAtualId === conv.id ? 'ativa' : ''}`;
+        div.innerHTML = `💬 ${conv.titulo.substring(0, 20)}`;
+        div.onclick = () => {
+            conversaAtualId = conv.id;
+            atualizarListaConversas();
+            carregarMensagens(conv.id);
+        };
+        container.appendChild(div);
+    });
+}
+
+function carregarMensagens(conversaId) {
+    const conversa = conversas.find(c => c.id === conversaId);
+    if(!conversa) return;
+    
+    const container = document.getElementById("chatMessages");
+    container.innerHTML = "";
+    
+    conversa.mensagens.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = `message ${msg.tipo}`;
+        div.innerHTML = msg.texto;
+        container.appendChild(div);
+    });
+    
+    container.scrollTop = container.scrollHeight;
+}
+
+function adicionarMensagem(texto, tipo) {
+    const conversa = conversas.find(c => c.id === conversaAtualId);
+    if(!conversa) return;
+    
+    conversa.mensagens.push({ tipo, texto });
+    salvarConversas();
+    carregarMensagens(conversaAtualId);
+}
+
+function novaConversa() {
+    criarNovaConversa();
+}
+
+// ============================================
+// IA SIMULADA (VERSÃO DEMO)
+// ============================================
+function respostaIA(mensagem) {
+    // Verifica se é admin/premium
+    const isPremium = usuarioAtual && usuarioAtual.premium;
+    
+    if(!isPremium) {
+        return "⚠️ **Versão Limitada** ⚠️\n\nAssine o plano Premium para ter acesso à IA completa, modos especiais (Rápido, Inteligente, Criativo, Executor) e respostas ilimitadas!\n\n✨ **Planos a partir de R$ 29,90/mês** ✨\n\nContate o administrador para ativar seu acesso.";
+    }
+    
+    // RESPOSTAS PREMIUM - baseadas no modo selecionado
+    const msgLower = mensagem.toLowerCase();
+    
+    if(modoAtual === "rapido") {
+        return `⚡ **Resposta Rápida** ⚡\n\n${gerarRespostaRapida(msgLower)}`;
+    }
+    
+    if(modoAtual === "criativo") {
+        return `🎨 **Modo Criativo** 🎨\n\n${gerarRespostaCriativa(msgLower)}`;
+    }
+    
+    if(modoAtual === "executor") {
+        return `⚙️ **Modo Executor** ⚙️\n\n${gerarRespostaExecutor(msgLower)}`;
+    }
+    
+    // Modo Inteligente (padrão)
+    return `🧠 **Modo Inteligente** 🧠\n\n${gerarRespostaInteligente(msgLower)}`;
+}
+
+function gerarRespostaRapida(msg) {
+    if(msg.includes("oi") || msg.includes("olá")) return "Olá! Como posso ajudar rapidamente? 🚀";
+    if(msg.includes("como")) return "Direto ao ponto: posso ajudar com código, ideias, análise ou automação. O que precisa?";
+    if(msg.includes("ajuda")) return "Comandos: /modo, /novo, /limpar, /premium. Escolha um!";
+    return `Resposta rápida para: "${msg.substring(0, 50)}". Diga o que precisa com mais detalhes para eu acelerar!`;
+}
+
+function gerarRespostaCriativa(msg) {
+    if(msg.includes("ideia") || msg.includes("negócio")) {
+        return "💡 **Ideia de Negócio**: NeuroFlex AI - Uma plataforma onde o usuário controla como a IA pensa! Velocidade, criatividade, precisão e estilo de raciocínio ajustáveis. Monetização freemium com planos premium. 🚀";
+    }
+    if(msg.includes("história") || msg.includes("conto")) {
+        return "📖 Era uma vez um jovem desenvolvedor que queria criar a IA mais adaptável do mundo. Com muito esforço, nasceu a NeuroFlex AI, e todos puderam moldar a inteligência como quisessem... ✨";
+    }
+    return `🎨 **Ideia Criativa**: ${msg}\n\nQue tal transformar isso em um projeto inovador? A NeuroFlex pode te ajudar a estruturar essa ideia de forma única e adaptável! 🌟`;
+}
+
+function gerarRespostaExecutor(msg) {
+    if(msg.includes("código") || msg.includes("programar")) {
+        return "```javascript\n// Executando sua solicitação...\nfunction solucao(problema) {\n    return 'Implementação pronta!';\n}\n```\n✅ Código gerado! Posso refinar se precisar.";
+    }
+    if(msg.includes("automação") || msg.includes("automatizar")) {
+        return "⚙️ **Automação Recomendada**:\n1. Identifique a tarefa repetitiva\n2. Crie um script simples\n3. Agende execuções\n4. Monitore resultados\n\nQuer ajuda em algum passo específico?";
+    }
+    return `⚙️ **Tarefa Prática**: Vou executar sua solicitação.\n\n✅ Analisando: "${msg}"\n✅ Processando...\n✅ Tarefa concluída com sucesso!\n\nDetalhes disponíveis sob demanda.`;
+}
+
+function gerarRespostaInteligente(msg) {
+    if(msg.includes("oi") || msg.includes("olá")) {
+        return "Olá! Eu sou o NeuroFlex AI, sua IA adaptável. Como posso ajudá-lo hoje? 🧠";
+    }
+    if(msg.includes("como você funciona")) {
+        return "NeuroFlex permite VOCÊ controlar como eu penso! Posso ser rápido, criativo, executor ou inteligente. Além disso, tenho memória e me adapto ao seu estilo. Experimente os modos! ✨";
+    }
+    if(msg.includes("modos") || msg.includes("configurações")) {
+        return "🎛️ **Modos Disponíveis**:\n• ⚡ Rápido: respostas diretas\n• 🧠 Inteligente: análises profundas\n• 🎨 Criativo: ideias e storytelling\n• ⚙️ Executor: tarefas e código\n\nSelecione um no painel abaixo!";
+    }
+    if(msg.includes("premium") || msg.includes("assinar")) {
+        return "✨ **Plano Premium NeuroFlex** ✨\n\n✅ IA completa\n✅ Todos os modos\n✅ Respostas ilimitadas\n✅ Memória avançada\n✅ Dashboard personalizado\n\n💰 Apenas R$ 29,90/mês ou R$ 299/ano\n\nContate o administrador para ativar!";
+    }
+    return `🧠 **Análise Inteligente**:\n\nSua mensagem: "${msg.substring(0, 100)}"\n\nCom base na sua pergunta, recomendo explorar nossos modos de IA. Cada modo oferece uma perspectiva diferente para resolver seu problema. Experimente o modo Criativo para ideias inovadoras ou o modo Executor para soluções práticas!\n\nDeseja que eu ative algum modo específico?`;
+}
+
+function setModo(modo) {
+    modoAtual = modo;
+    // Atualizar visual dos botões
+    document.querySelectorAll('.modo-btn').forEach(btn => {
+        btn.classList.remove('ativo');
+    });
+    document.querySelector(`.modo-btn[data-modo="${modo}"]`).classList.add('ativo');
+    
+    // Mensagem de confirmação
+    const nomes = { rapido: "Rápido ⚡", inteligente: "Inteligente 🧠", criativo: "Criativo 🎨", executor: "Executor ⚙️" };
+    adicionarMensagem(`Modo alterado para **${nomes[modo]}**! Agora minhas respostas seguirão este estilo.`, "bot");
+}
+
+function enviarMensagem() {
+    const input = document.getElementById("mensagemInput");
+    const texto = input.value.trim();
+    if(!texto) return;
+    
+    adicionarMensagem(texto, "user");
+    input.value = "";
+    
+    // Simula processamento da IA
+    setTimeout(() => {
+        const resposta = respostaIA(texto);
+        adicionarMensagem(resposta, "bot");
+    }, 500);
+}
+
+// ============================================
+// SISTEMA DE LOGIN
+// ============================================
+function fazerLogin() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const senha = document.getElementById("loginSenha").value;
+    
+    // ADMIN DEFINIDO AQUI - SÓ VOCÊ!
+    if(email === "seuemail@gmail.com") {
+        usuarioAtual = {
+            email: email,
+            role: "admin",
+            premium: true,
+            vitalicio: true
+        };
+    } else if(email && senha) {
+        // Usuário comum (demo)
+        usuarioAtual = {
+            email: email,
+            role: "user",
+            premium: false,
+            vitalicio: false
+        };
+    } else {
+        alert("Digite email e senha!");
+        return;
+    }
+    
+    // Esconder login e mostrar app
+    document.getElementById("telaLogin").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    
+    // Atualizar UI
+    atualizarInterfaceUsuario();
+    
+    // Carregar conversas
+    carregarConversas();
+}
+
+function atualizarInterfaceUsuario() {
+    const badge = document.getElementById("userRoleBadge");
+    const modosPainel = document.getElementById("modosPainel");
+    const freeAviso = document.getElementById("freeAviso");
+    
+    if(usuarioAtual.premium) {
+        badge.innerHTML = '<span class="premium-badge">👑 Premium Vitalício</span>';
+        modosPainel.classList.add("visible");
+        freeAviso.classList.remove("visible");
+    } else {
+        badge.innerHTML = '<span class="free-badge">🆓 Plano Free</span>';
+        modosPainel.classList.remove("visible");
+        freeAviso.classList.add("visible");
+    }
+}
+
+// Inicialização
+console.log("NeuroFlex AI carregado!");
+</script>
+
+</body>
+</html>
